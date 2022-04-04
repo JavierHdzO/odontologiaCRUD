@@ -66,5 +66,48 @@ public class operaciones {
         return false;
 
     }
+    
+    
+    
+        public boolean guardarDoc(String Cedula, String Nombres, String Apellidos, String telefono, int especialdad) throws SQLException {
+        Connection con = null;
+        ResultSet rs = null, rs2;
+        Statement inst = null;
+        CallableStatement cs = null;
+
+        try {
+            Class.forName(this.Driver);
+            con = DriverManager.getConnection(this.URL, this.User, this.Pass);
+            inst = con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            cs = con.prepareCall("{call sp_findUser(?,?)}");
+            /*
+            cs.setString(1, Usrname);
+            cs.setString(2, pass);
+            rs = cs.executeQuery();
+
+            if (rs != null) {
+
+                String usrRes = "";
+                String passRes = "";
+                while (rs.next()) {
+                    usrRes = rs.getString("Login");
+                    passRes = rs.getString("Password");
+                    
+                    if(usrRes.equals(Usrname) && pass.equals(passRes))
+                    {
+                        return true;
+                    }
+                }
+
+                con.close();
+            }
+            */
+        } catch (SQLException e) {
+        } catch (ClassNotFoundException ex) {
+        }
+
+        return false;
+
+    }
 
 }

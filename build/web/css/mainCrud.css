@@ -3,7 +3,7 @@
 main
 {
     background: white ;
-    min-height: 620px;
+    min-height: 7000px;
 }
 
 span
@@ -11,3 +11,18 @@ span
     font-size: 1.2em;
 }
 
+#btnAdd
+{
+   background: green;
+   border-radius: 20%;
+}
+
+.buttonDelete
+{
+    color: red;
+}
+
+.buttonEdit
+{
+    color: orange;
+}

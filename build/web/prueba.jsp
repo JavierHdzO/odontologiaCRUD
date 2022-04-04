@@ -84,18 +84,18 @@
                         <div class= "card-body">
                             <form action="#" method="POST">
                                 <div class="form-group my-1">
-                                    <input type="text" class="form-control" name="usuario" placeholder="Usuario" />
+                                    <input type="text" class="form-control" name="usuario" placeholder="Usuario" required />
                                 </div>
                                 <div class="form-group my-1">
-                                    <input type="text" class="form-control" name="nombre" placeholder="Nombre" />
-                                </div>
-
-                                <div class="form-group my-1">
-                                    <input type="password" class="form-control" name="password" placeholder="Contraseña" />
+                                    <input type="text" class="form-control" name="nombre" placeholder="Nombre" required/>
                                 </div>
 
                                 <div class="form-group my-1">
-                                    <input type="password" class="form-control" name="password_conf" placeholder="Confirmar contraseña" />
+                                    <input type="password" class="form-control" name="password" placeholder="Contraseña" required/>
+                                </div>
+
+                                <div class="form-group my-1">
+                                    <input type="password" class="form-control" name="password_conf" placeholder="Confirmar contraseña" required />
                                 </div>
 
                                 <div class="form-group my-2">

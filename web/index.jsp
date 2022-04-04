@@ -29,10 +29,10 @@
                         <div class= "card-body">
                             <form action="#" method="POST">
                                 <div class="form-group my-1">
-                                    <input type="text" class="form-control" name="usuario" placeholder="Usuario" />
+                                    <input type="text" class="form-control" name="usuario" placeholder="Usuario" required />
                                 </div>
                                 <div class="form-group my-1">
-                                    <input type="password" class="form-control" name="password" placeholder="Contraseña" />
+                                    <input type="password" class="form-control" name="password" placeholder="Contraseña" required/>
                                 </div>
                                 <div class="form-group my-2">
                                     <center>
@@ -49,33 +49,29 @@
                             <%
 
                                 operaciones ope = new operaciones();
-                           
+
                                 if (request.getParameter("btnIngresar") != null) {
                                     String usrName = request.getParameter("usuario");
                                     String pass = request.getParameter("password");
 
-          
                                     boolean rs = ope.logIn(usrName, pass);
- 
-                                    if ( rs ) {
+
+                                    if (rs) {
                                         HttpSession sesion = request.getSession();
                                         sesion.setAttribute("usr", usrName);
                                         response.sendRedirect("mainCrud.jsp");
-                                    } 
-                                    else{
+                                    } else {
                                         response.sendRedirect("index.jsp");
                                     }
-                                      
-                                } 
-                                
-                                if(request.getParameter("cerrar") != null) 
-                                {
-                                    if(request.getParameter("cerrar").equals("true"))
-                                    {
+
+                                }
+
+                                if (request.getParameter("cerrar") != null) {
+                                    if (request.getParameter("cerrar").equals("true")) {
                                         session.invalidate();
                                     }
                                 }
-                          
+
                             %>
 
                         </div>

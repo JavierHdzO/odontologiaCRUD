@@ -9,8 +9,18 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Administracion</title>
+        
+        <!--Bootstrap 5-->
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+        
+         <!--FONTS AWESOME-->
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css"
+              integrity="sha384-DyZ88mC6Up2uqS4h/KRgHuoeGwBcD4Ng9SiP4dIRy0EXTlnuz47vAwmeGwVChigm" crossorigin="anonymous">
+        
+        <!--Css styles-->
         <link  href="css/mainCrud.css" rel="stylesheet" type="text/css">
+
+       
     </head>
     <body>
         <nav class="navbar  navbar-expand-lg navbar-dark bg-primary">
@@ -69,12 +79,120 @@
 
 
                     </div>
-                    <div class="col-9 bg-secondary" align="center">
-                        <h1>Contenido</h1>
+                    <div class="col-9" >
+
+                        <a class="btn btn-success  " type="button" id="btnAdd" data-bs-toggle="modal" data-bs-target="#exampleModal">Agregar</a>
+
+                        <div align="center">
+
+                            <table class="table table-bordered">
+                                <thead>
+                                <th>Cedula</th>
+                                <th>Nombres</th>
+                                <th>Apellidos</th>
+                                <th>Telefono</th>
+                                <th>Especialidad</th>
+                                <th>Editar</th>
+                                <th>Elimiar</th>
+                                </thead>
+                                <tbody>
+
+                                    <%                                        int cont = 0;
+                                        while (cont <= 5) {
+                                    %>
+                                    <tr>
+                                        <td> Cedula </td>
+                                        <td> Nombre </td>
+                                        <td> Apellidos </td>
+                                        <td> Telefono </td>
+                                        <td> Especialiad</td>
+                                        <td align="center"> <a href="#" class="far fa-edit buttonEdit"></a> </td>
+                                        <td align="center"> <a href="#" class="far fa-trash-alt buttonDelete"></a></td>
+                                    </tr>
+                                    <%
+                                            cont++;
+                                        }
+                                    %>
+
+                                </tbody>
+                            </table>
+
+                        </div>
+
                     </div>
                 </div>
             </div>
         </main>
+
+
+        <!--Modal-->
+
+        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Añadir nuevo medico</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="#" method="POST">
+                            <div class="mb-3 row">
+                                <label for="staticEmail" class="col-sm-2 col-form-label">Cédula</label>
+                                <div class="col-sm-10">
+                                    <input type="text"  class="form-control-plaintext" id="staticEmail" name="cedula" requiered>
+                                </div>
+                            </div>
+                            <div class="mb-3 row">
+                                <label for="inputPassword" class="col-sm-2 col-form-label">Nombres</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" id="inputPassword" name="nombres"required >
+                                </div>
+                            </div>
+
+                            <div class="mb-3 row">
+                                <label for="inputPassword" class="col-sm-2 col-form-label">Apellidos</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" id="inputPassword" name="apellidos" required>
+                                </div>
+                            </div>
+
+                            <div class="mb-3 row">
+                                <label for="inputPassword" class="col-sm-2 col-form-label">Telefono</label>
+                                <div class="col-sm-10">
+                                    <input type="tel" class="form-control" id="inputPassword" name="telefono" required >
+                                </div>
+                            </div>
+
+
+                            <div class="mb-3 row">
+                                <label for="inputSelected" class="col-sm-2 col-form-label">Especialidad</label>
+                                <select id="inputSelected" name="especialidad" class="form-select form-select-sm mx-1" aria-label=".form-select-sm example">
+
+                                    <option value="1" selected>Cirujano Dentista</option>
+                                    <option value="2">Ortodoncista</option>
+                                    <option value="3">Ortopediatra</option>
+                                    <option value="4">Dentista</option>
+                                </select>
+                            </div>
+
+
+
+
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                                <input type="submit" class="btn btn-primary" value="Guardar" name="btnSaveMedico">
+                            </div>
+                        </form>
+
+                        <%
+
+                        %>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
 
