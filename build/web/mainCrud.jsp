@@ -9,18 +9,18 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Administracion</title>
-        
+
         <!--Bootstrap 5-->
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
-        
-         <!--FONTS AWESOME-->
+
+        <!--FONTS AWESOME-->
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css"
               integrity="sha384-DyZ88mC6Up2uqS4h/KRgHuoeGwBcD4Ng9SiP4dIRy0EXTlnuz47vAwmeGwVChigm" crossorigin="anonymous">
-        
+
         <!--Css styles-->
         <link  href="css/mainCrud.css" rel="stylesheet" type="text/css">
 
-       
+
     </head>
     <body>
         <nav class="navbar  navbar-expand-lg navbar-dark bg-primary">
@@ -30,15 +30,6 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarNavDropdown">
-                    <ul class="navbar-nav">
-                        <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="#">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Features</a>
-                        </li>
-                    </ul>
-
 
                     <ul class="navbar-nav ms-auto">
 
@@ -84,6 +75,45 @@
                         <a class="btn btn-success  " type="button" id="btnAdd" data-bs-toggle="modal" data-bs-target="#exampleModal">Agregar</a>
 
                         <div align="center">
+                            <%                                if (sesion.getAttribute("message") != null) {
+                                    String mess = sesion.getAttribute("message").toString();
+                                    if (mess.equals("Exito")) {
+                                        out.print("<div class='alert alert-success alert-dismissible fade show' role='alert'>"
+                                                + "<strong>" + mess + "</strong>"
+                                                + "<button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>"
+                                                + "</div>");
+                                    } else {
+                                        out.print("<div class='alert alert-danger alert-dismissible fade show' role='alert'>"
+                                                + "<strong>" + mess + "</strong>"
+                                                + "<button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>"
+                                                + "</div>");
+                                    }
+                                    sesion.removeAttribute("message");
+                                }
+
+                            %>
+
+                            <%                                if (request.getParameter("btnSaveMedico") != null) {
+                                    operaciones ope = new operaciones();
+
+                                    String p_Cedula = request.getParameter("cedula");
+                                    String p_Nombres = request.getParameter("nombres");
+                                    String p_Apellidos = request.getParameter("apellidos");
+                                    String p_Telefono = request.getParameter("telefono");
+                                    int p_Especialidad = Integer.parseInt(request.getParameter("especialidad").toString());
+                                    
+
+                                    String resu = ope.guardarDoc(p_Cedula, p_Nombres, p_Apellidos, p_Telefono, p_Especialidad);
+
+                                    if (!resu.isEmpty()) {
+
+                                        sesion.setAttribute("message", resu);
+                                        response.sendRedirect("mainCrud.jsp");
+                                    }
+
+                                }
+
+                            %>
 
                             <table class="table table-bordered">
                                 <thead>
@@ -97,22 +127,69 @@
                                 </thead>
                                 <tbody>
 
-                                    <%                                        int cont = 0;
-                                        while (cont <= 5) {
+                                    <%                                        Connection con = null;
+                                        ResultSet rs = null;
+                                        Statement inst = null;
+                                        CallableStatement cs = null;
+
+                                        String strCon = "jdbc:mysql://localhost:3306/odonto?zeroDateTimeBehavior=CONVERT_TO_NULL";
+                                        String user = "root";
+                                        String pass = "password";
+
+                                        Class.forName("com.mysql.cj.jdbc.Driver");
+                                        con = DriverManager.getConnection(strCon, user, pass);
+                                        inst = con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+
+                                        cs = con.prepareCall("{call sp_showMedicos()}");
+
+                                        try {
+
+                                            rs = cs.executeQuery();
+
+                                            if (rs != null) {
+
+                                                
+                                                    while (rs.next()) {
+                                                        String cedu = rs.getString("Cedula");
+                                                        String names = rs.getString("Nombres");
+                                                        String last_names = rs.getString("Apellidos");
+                                                        String tel = rs.getString("Telefono");
+                                                        int espe = rs.getInt("Especialidad");
+                                                        int ID = rs.getInt("ID");
+                                                        //String fallo = rs.getString("Resultado");
                                     %>
+
+
                                     <tr>
-                                        <td> Cedula </td>
-                                        <td> Nombre </td>
-                                        <td> Apellidos </td>
-                                        <td> Telefono </td>
-                                        <td> Especialiad</td>
-                                        <td align="center"> <a href="#" class="far fa-edit buttonEdit"></a> </td>
+                                        <td><%=cedu%></td>
+                                        <td><%=names%></td>
+                                        <td><%=last_names%>as </td>
+                                        <td><%=tel%></td>
+                                        <td><%=espe%></td>
+                                        <td align="center"> <a href="editarMedicos.jsp?id=<%=ID%>" class="far fa-edit buttonEdit"></a> </td>
                                         <td align="center"> <a href="#" class="far fa-trash-alt buttonDelete"></a></td>
                                     </tr>
                                     <%
-                                            cont++;
-                                        }
+                                                    }
+
+                                                    
+                                                    rs.close();
+                                                    cs.close();
+                                                    con.close();
+
+                                            }
+                                        } catch (SQLException e) {
+
+                                        };
+
                                     %>
+                                    
+                                    <%
+                                        
+                                        
+                                    
+                                    %>
+
 
                                 </tbody>
                             </table>
@@ -184,9 +261,7 @@
                             </div>
                         </form>
 
-                        <%
 
-                        %>
 
                     </div>
 

@@ -69,44 +69,58 @@ public class operaciones {
     
     
     
-        public boolean guardarDoc(String Cedula, String Nombres, String Apellidos, String telefono, int especialdad) throws SQLException {
+        public String guardarDoc(String pCedula, String pNombres, String pApellidos, String pTelefono, int pEspecialdad) throws SQLException {
         Connection con = null;
         ResultSet rs = null, rs2;
         Statement inst = null;
         CallableStatement cs = null;
-
+        String resul = "Fallo";
         try {
             Class.forName(this.Driver);
             con = DriverManager.getConnection(this.URL, this.User, this.Pass);
             inst = con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-            cs = con.prepareCall("{call sp_findUser(?,?)}");
-            /*
-            cs.setString(1, Usrname);
-            cs.setString(2, pass);
+            cs = con.prepareCall("{call sp_newMedico(?,?,?,?,?)}");
+            
+            cs.setString(1, pCedula);
+            cs.setString(2, pNombres);
+            cs.setString(3, pApellidos);
+            cs.setString(4, pTelefono);
+            cs.setInt(5, pEspecialdad);
+            
             rs = cs.executeQuery();
+            
 
             if (rs != null) {
 
-                String usrRes = "";
-                String passRes = "";
+                
+ 
                 while (rs.next()) {
-                    usrRes = rs.getString("Login");
-                    passRes = rs.getString("Password");
+                    resul = rs.getString("Resultado");
+ 
                     
-                    if(usrRes.equals(Usrname) && pass.equals(passRes))
+                    if(resul.equals("Exito") )
                     {
-                        return true;
+                        out.print("<p>"+resul+"</p>");
+                        rs.close();
+                        cs.close();
+                        con.close();
+                        return resul;
+                    }else
+                    {
+                        rs.close();
+                        cs.close();
+                        con.close();
+                        return resul;
                     }
                 }
 
                 con.close();
             }
-            */
-        } catch (SQLException e) {
-        } catch (ClassNotFoundException ex) {
+            
+        } catch (SQLException | ClassNotFoundException e) {
         }
 
-        return false;
+        return resul;
 
     }
 
