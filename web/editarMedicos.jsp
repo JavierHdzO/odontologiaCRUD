@@ -151,7 +151,7 @@
 
         <%
             if (request.getParameter("btnUpdateMedico") != null) {
-                
+
                 try {
 
                     operaciones ope = new operaciones();
@@ -170,7 +170,6 @@
                         sesion.setAttribute("message_up", resu);
                         response.sendRedirect("mainCrud.jsp");
                     }
-
 
                 } catch (SQLException e) {
                 }

@@ -3,7 +3,7 @@
 <%@page import="java.io.*, java.net.*, java.sql.*"%>
 <%@page import="modelado.operaciones"%>
 <%@page session="true" %>
-<%@page import="java.text.SimpleDateFormat" %>
+
 
 <!DOCTYPE html>
 <html>
@@ -100,7 +100,7 @@
                                 </a>
                                 <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
                                     <li><hr class="dropdown-divider"></li>
-                                    <li><a class="dropdown-item" href='index.jsp?cerrar=true'>C</a></li>
+                                    <li><a class="dropdown-item" href='index.jsp?cerrar=true'>Cerrar Sesión</a></li>
                                 </ul>
                             </div>
                         </div>
@@ -138,7 +138,7 @@
                             <%      if (sesion.getAttribute("message_up") != null) {
 
                                     String mess = sesion.getAttribute("message_up").toString();
-                                    if (mess.equals("Usuario_Actualizado")) {
+                                    if (mess.equals("Usuario_Actualizado") || mess.equals("Paciente_Actualizado")) {
                                         out.print("<div class='alert alert-success alert-dismissible fade show' role='alert'>"
                                                 + "<strong>" + mess + "</strong>"
                                                 + "<button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>"
@@ -164,13 +164,12 @@
                                     String p_colonia = request.getParameter("Colonia");
                                     int p_ciudad =  Integer.parseInt(request.getParameter("Ciudad"));
                                     int p_cp = Integer.parseInt(request.getParameter("cp"));
-                                    Date p_nacimiento = new Date((new SimpleDateFormat("dd-MM-yyyy").parse(request.getParameter("nacimiento"))).getTime());
+                                    Date p_nacimiento = Date.valueOf(request.getParameter("nacimiento"));
                                     String p_sexo = request.getParameter("sexo");
                                     String p_Telefono = request.getParameter("telefono");
 
                                     //String p_foto = request.getParameter("foto");
                                     //String p_calle = request.getParameter("foto");
-                      
 
                                     String resu = ope.guardarPac(p_Nombres, p_Apellidos, p_calle, p_noc,p_colonia,p_ciudad,  p_cp, p_nacimiento, p_sexo, p_Telefono, null  );
 
