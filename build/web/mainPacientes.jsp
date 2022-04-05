@@ -3,6 +3,7 @@
 <%@page import="java.io.*, java.net.*, java.sql.*"%>
 <%@page import="modelado.operaciones"%>
 <%@page session="true" %>
+<%@page import="java.text.SimpleDateFormat" %>
 
 <!DOCTYPE html>
 <html>
@@ -18,7 +19,7 @@
               integrity="sha384-DyZ88mC6Up2uqS4h/KRgHuoeGwBcD4Ng9SiP4dIRy0EXTlnuz47vAwmeGwVChigm" crossorigin="anonymous">
 
         <!--Css styles-->
-        
+
         <link  href="css/sidebars.css" rel="stylesheet" type="text/css">
         <link  href="css/mainCrud.css" rel="stylesheet" type="text/css">
 
@@ -54,18 +55,18 @@
                         <div class="d-flex flex-column flex-shrink-0 p-3 text-white bg-dark"  id="slider2" style="width: 100%; ">
                             <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
                                 <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"/></svg>
-                                <span class="fs-4">Administración</span>
+                                <span class="fs-4">Sidebar</span>
                             </a>
                             <hr>
                             <ul class="nav nav-pills flex-column mb-auto">
                                 <li class="nav-item">
-                                    <a href="#" class="nav-link active" aria-current="page">
+                                    <a href="mainCrud.jsp" class="nav-link text-white" >
                                         <svg class="bi me-2" width="16" height="16"><use xlink:href="#home"/></svg>
                                         Medicos
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="mainPacientes.jsp" class="nav-link text-white">
+                                    <a href="#" class="nav-link  active" aria-current="page">
                                         <svg class="bi me-2" width="16" height="16"><use xlink:href="#speedometer2"/></svg>
                                         Pacientes
                                     </a>
@@ -76,7 +77,7 @@
                                         Citas
                                     </a>
                                 </li>
-                                
+
                             </ul>
                             <hr>
                             <div class="dropdown">
@@ -115,9 +116,10 @@
                         <a class="btn btn-success mb-3 " type="button" id="btnAdd" data-bs-toggle="modal" data-bs-target="#exampleModal">Agregar</a>
 
                         <div align="center">
-                            <%                                if (sesion.getAttribute("message") != null) {
+                            <%                                
+                                    if (sesion.getAttribute("message") != null) {
                                     String mess = sesion.getAttribute("message").toString();
-                                    if (mess.equals("Exito") || mess.equals("Medico_Eliminado")) {
+                                    if (mess.equals("Exito") || mess.equals("Medico_Eliminado") || mess.equals("Registrado_Correctamente") || mess.equals("Paciente_Eliminado")  ) {
                                         out.print("<div class='alert alert-success alert-dismissible fade show' role='alert'>"
                                                 + "<strong>" + mess + "</strong>"
                                                 + "<button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>"
@@ -155,35 +157,45 @@
                             <%                                if (request.getParameter("btnSaveMedico") != null) {
                                     operaciones ope = new operaciones();
 
-                                    String p_Cedula = request.getParameter("cedula");
                                     String p_Nombres = request.getParameter("nombres");
                                     String p_Apellidos = request.getParameter("apellidos");
+                                    String p_calle = request.getParameter("calle");
+                                    String p_noc = request.getParameter("noc");
+                                    String p_colonia = request.getParameter("Colonia");
+                                    int p_ciudad =  Integer.parseInt(request.getParameter("Ciudad"));
+                                    int p_cp = Integer.parseInt(request.getParameter("cp"));
+                                    Date p_nacimiento = new Date((new SimpleDateFormat("dd-MM-yyyy").parse(request.getParameter("nacimiento"))).getTime());
+                                    String p_sexo = request.getParameter("sexo");
                                     String p_Telefono = request.getParameter("telefono");
-                                    int p_Especialidad = Integer.parseInt(request.getParameter("especialidad").toString());
 
-                                    String resu = ope.guardarDoc(p_Cedula, p_Nombres, p_Apellidos, p_Telefono, p_Especialidad);
+                                    //String p_foto = request.getParameter("foto");
+                                    //String p_calle = request.getParameter("foto");
+                      
+
+                                    String resu = ope.guardarPac(p_Nombres, p_Apellidos, p_calle, p_noc,p_colonia,p_ciudad,  p_cp, p_nacimiento, p_sexo, p_Telefono, null  );
 
                                     if (!resu.isEmpty()) {
 
                                         sesion.setAttribute("message", resu);
-                                        response.sendRedirect("mainCrud.jsp");
+                                        response.sendRedirect("mainPacientes.jsp");
                                     }
 
                                 }
 
                             %>
 
-                            <%                                String d_ID = request.getParameter("delete");
+                            <%                                
+                                String d_ID = request.getParameter("delete");
                                 if (d_ID != null) {
 
                                     operaciones ope = new operaciones();
 
-                                    String resu = ope.deleteMed(Integer.parseInt(d_ID));
+                                    String resu = ope.deletePaciente(Integer.parseInt(d_ID));
 
                                     if (!resu.isEmpty()) {
 
                                         sesion.setAttribute("message", resu);
-                                        response.sendRedirect("mainCrud.jsp");
+                                        response.sendRedirect("mainPacientes.jsp");
                                     }
 
                                 }
@@ -194,11 +206,18 @@
 
                             <table class="table table-bordered">
                                 <thead>
-                                <th>Cedula</th>
+                                <th>NoAsig</th>
                                 <th>Nombres</th>
                                 <th>Apellidos</th>
+                                <th>Calle</th>
+                                <th>Numero</th>
+                                <th>Colonia</th>
+                                <th>Ciudad</th>
+                                <th>CP</th>
+                                <th>FechaNac</th>
+                                <th>Sexo</th>
                                 <th>Telefono</th>
-                                <th>Especialidad</th>
+                                <th>Foto</th>
                                 <th>Editar</th>
                                 <th>Elimiar</th>
                                 </thead>
@@ -217,7 +236,7 @@
                                         con = DriverManager.getConnection(strCon, user, pass);
                                         inst = con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
 
-                                        cs = con.prepareCall("{call sp_showMedicos()}");
+                                        cs = con.prepareCall("{call sp_showPaciente()}");
 
                                         try {
 
@@ -226,24 +245,38 @@
                                             if (rs != null) {
 
                                                 while (rs.next()) {
-                                                    String cedu = rs.getString("Cedula");
+                                                    int ID = rs.getInt("NoAsig");
                                                     String names = rs.getString("Nombres");
                                                     String last_names = rs.getString("Apellidos");
+                                                    String add = rs.getString("Calle");
+                                                    String no = rs.getString("Numero");
+                                                    String colonia = rs.getString("Colonia");
+                                                    int ciudad = rs.getInt("Ciudad");
+                                                    int cp = rs.getInt("CP");
+                                                    Date fecha = rs.getDate("FechaNac");
+                                                    String sexo = rs.getString("Sexo");
                                                     String tel = rs.getString("Telefono");
-                                                    int espe = rs.getInt("Especialidad");
-                                                    int ID = rs.getInt("ID");
+                                                    
+                                                    
                                                     //String fallo = rs.getString("Resultado");
-%>
+                                    %>
 
 
                                     <tr>
-                                        <td><%=cedu%></td>
+                                        <td><%=ID%></td>
                                         <td><%=names%></td>
-                                        <td><%=last_names%> </td>
+                                        <td><%=last_names%></td>
+                                        <td><%=add%></td>
+                                        <td><%=no%></td>
+                                        <td><%=colonia%></td>
+                                        <td><%=ciudad%></td>
+                                        <td><%=cp%></td>
+                                        <td><%=fecha%></td>
+                                        <td><%=sexo%></td>
                                         <td><%=tel%></td>
-                                        <td><%=espe%></td>
-                                        <td align="center"> <a href="editarMedicos.jsp?id=<%=ID%>" class="far fa-edit buttonEdit"></a> </td>
-                                        <td align="center"> <a href="mainCrud.jsp?delete=<%=ID%> " type="submit" name="btnDeletMed" class="far fa-trash-alt buttonDelete"></a></td>
+                                        <td>Foto</td>
+                                        <td align="center"> <a href="editarPaciente.jsp?id=<%=ID%>" class="far fa-edit buttonEdit"></a> </td>
+                                        <td align="center"> <a href="mainPacientes.jsp?delete=<%=ID%> " type="submit" name="btnDeletMed" class="far fa-trash-alt buttonDelete"></a></td>
                                     </tr>
                                     <%
                                                 }
@@ -276,17 +309,12 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Añadir nuevo medico</h5>
+                        <h5 class="modal-title" id="exampleModalLabel">Añadir nuevo paciente</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                         <form action="#" method="POST">
-                            <div class="mb-3 row">
-                                <label for="staticEmail" class="col-sm-2 col-form-label">Cédula</label>
-                                <div class="col-sm-10">
-                                    <input type="text"  class="form-control-plaintext" id="staticEmail" name="cedula" requiered>
-                                </div>
-                            </div>
+
                             <div class="mb-3 row">
                                 <label for="inputPassword" class="col-sm-2 col-form-label">Nombres</label>
                                 <div class="col-sm-10">
@@ -302,24 +330,68 @@
                             </div>
 
                             <div class="mb-3 row">
+                                <label for="inputPassword" class="col-sm-2 col-form-label">Calle</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" id="inputPassword" name="calle" required >
+                                </div>
+                            </div>
+                            
+                            
+                            <div class="mb-3 row">
+                                <label for="inputPassword" class="col-sm-2 col-form-label">Colonia</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" id="inputPassword" name="Colonia" required >
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3 row">
+                                <label for="inputPassword" class="col-sm-2 col-form-label">Ciudad</label>
+                                <div class="col-sm-10">
+                                    <input type="number" class="form-control" id="inputPassword" name="Ciudad" required >
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3 row">
+                                <label for="inputNo" class="col-sm-2 col-form-label">Numero</label>
+                                <div class="col-sm-4">
+                                    <input type="number" class="form-control" id="inputNo" name="noc" required >
+                                </div>
+
+                                <label for="inputCp" class="col-sm-2 col-form-label">CP</label>
+                                <div class="col-sm-4">
+                                    <input type="number" class="form-control" id="inputCp" name="cp" required >
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3 row">
+                                <label for="inputPassword" class="col-sm-2 col-form-label">Fecha N</label>
+                                <div class="col-sm-4">
+                                    <input type="date" class="form-control" id="inputPassword" name="nacimiento" required >
+                                </div>
+                                
+                                <label for="inputSelected" class="col-sm-2 col-form-label">Sexo</label>
+                                <select id="inputSelected" name="sexo" class="col-sm-4" aria-label=".form-select-sm example">
+                                    <option value="M" selected>Masculino</option>
+                                    <option value="F">Femenino</option>
+                                    <option value="B">Binario</option>
+                                </select>
+                            </div>
+                            
+
+                            
+                            <div class="mb-3 row">
                                 <label for="inputPassword" class="col-sm-2 col-form-label">Telefono</label>
                                 <div class="col-sm-10">
                                     <input type="tel" class="form-control" id="inputPassword" name="telefono" required >
                                 </div>
                             </div>
-
-
+                            
                             <div class="mb-3 row">
-                                <label for="inputSelected" class="col-sm-2 col-form-label">Especialidad</label>
-                                <select id="inputSelected" name="especialidad" class="form-select form-select-sm mx-1" aria-label=".form-select-sm example">
-
-                                    <option value="1" selected>Cirujano Dentista</option>
-                                    <option value="2">Ortodoncista</option>
-                                    <option value="3">Ortopediatra</option>
-                                    <option value="4">Dentista</option>
-                                </select>
+                                <label for="inputPassword" class="col-sm-2 col-form-label">Foto</label>
+                                <div class="col-sm-10">
+                                    <input type="file" name="foto" accept="image/png, image/gif, image/jpeg, image/jpg" class="form-control" id="inputPassword" name="foto" >
+                                </div>
                             </div>
-
 
 
 
@@ -328,9 +400,6 @@
                                 <input type="submit" class="btn btn-primary" value="Guardar" name="btnSaveMedico">
                             </div>
                         </form>
-
-
-
                     </div>
 
                 </div>

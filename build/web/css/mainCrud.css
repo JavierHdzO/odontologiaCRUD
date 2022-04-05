@@ -1,9 +1,9 @@
 
 
-main
-{
+main{
     background: white ;
     min-height: 700px;
+    height: 100%;
 }
 
 span
@@ -13,7 +13,7 @@ span
 
 #btnAdd
 {
-   background: green;
+   background: rgba(20, 197, 64, 0.952);
    border-radius: 20%;
 }
 
@@ -25,4 +25,19 @@ span
 .buttonEdit
 {
     color: orange;
+}
+
+#slider
+{
+    height: 100%;
+}
+
+#slider #slider2
+{
+    height: 100%;
+}
+
+#divMain
+{
+    height: 100%
 }

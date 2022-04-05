@@ -18,6 +18,8 @@
               integrity="sha384-DyZ88mC6Up2uqS4h/KRgHuoeGwBcD4Ng9SiP4dIRy0EXTlnuz47vAwmeGwVChigm" crossorigin="anonymous">
 
         <!--Css styles-->
+        
+        <link  href="css/sidebars.css" rel="stylesheet" type="text/css">
         <link  href="css/mainCrud.css" rel="stylesheet" type="text/css">
 
 
@@ -42,37 +44,75 @@
         </nav>
 
 
-        <main class="container-fluid main">
-            <div class="container-fluid my-2">
-                <div class="row ">
-                    <div class="col-3 bg-primary align-items-center " align="center">
+        <main>
+            <div class="container-fluid ">
+                <div class="row " id="divMain" >
+                    <!-- <div class="col-3 bg-primary align-items-center " align="center">-->
+                    <div class="col-3 m-0 bg-dark" id="slider">
 
-                        <div class="container align-items-end mx-5">
-                            <img src="#" alt="Imagen de logo">
+
+                        <div class="d-flex flex-column flex-shrink-0 p-3 text-white bg-dark"  id="slider2" style="width: 100%; ">
+                            <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
+                                <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"/></svg>
+                                <span class="fs-4">Administración</span>
+                            </a>
+                            <hr>
+                            <ul class="nav nav-pills flex-column mb-auto">
+                                <li class="nav-item">
+                                    <a href="#" class="nav-link active" aria-current="page">
+                                        <svg class="bi me-2" width="16" height="16"><use xlink:href="#home"/></svg>
+                                        Medicos
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="mainPacientes.jsp" class="nav-link text-white">
+                                        <svg class="bi me-2" width="16" height="16"><use xlink:href="#speedometer2"/></svg>
+                                        Pacientes
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" class="nav-link text-white">
+                                        <svg class="bi me-2" width="16" height="16"><use xlink:href="#table"/></svg>
+                                        Citas
+                                    </a>
+                                </li>
+                                
+                            </ul>
+                            <hr>
+                            <div class="dropdown">
+                                <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <img src="https://github.com/mdo.png" alt="" width="32" height="32" class="rounded-circle me-2">
+                                    <strong><%
+                                        HttpSession sesion = request.getSession();
+                                        String usuario;
+
+                                        if (sesion.getAttribute("usr") != null) {
+                                            usuario = sesion.getAttribute("usr").toString();
+
+                                            out.print("<span>" + usuario + "</span>");
+                                        } else {
+                                            out.print("<script>location.replace('index.jsp') </script>");
+                                        }
+
+
+                                        %></strong>
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item" href='index.jsp?cerrar=true'>C</a></li>
+                                </ul>
+                            </div>
                         </div>
 
-                        <h4>Usuario</h4>
-
-                        <%
-                            HttpSession sesion = request.getSession();
-                            String usuario;
-
-                            if (sesion.getAttribute("usr") != null) {
-                                usuario = sesion.getAttribute("usr").toString();
-
-                                out.print("<span>" + usuario + "</span>");
-                            } else {
-                                out.print("<script>location.replace('index.jsp') </script>");
-                            }
 
 
-                        %>
+
 
 
                     </div>
-                    <div class="col-9" >
+                    <div class="col-9 my-3" >
 
-                        <a class="btn btn-success  " type="button" id="btnAdd" data-bs-toggle="modal" data-bs-target="#exampleModal">Agregar</a>
+                        <a class="btn btn-success mb-3 " type="button" id="btnAdd" data-bs-toggle="modal" data-bs-target="#exampleModal">Agregar</a>
 
                         <div align="center">
                             <%                                if (sesion.getAttribute("message") != null) {
@@ -92,16 +132,16 @@
                                 }
 
                             %>
-                            
+
                             <%      if (sesion.getAttribute("message_up") != null) {
-                            
+
                                     String mess = sesion.getAttribute("message_up").toString();
                                     if (mess.equals("Usuario_Actualizado")) {
                                         out.print("<div class='alert alert-success alert-dismissible fade show' role='alert'>"
                                                 + "<strong>" + mess + "</strong>"
                                                 + "<button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>"
                                                 + "</div>");
-                                    } else if( mess.equals("Fallo_Actualizacion")){
+                                    } else if (mess.equals("Fallo_Actualizacion")) {
                                         out.print("<div class='alert alert-danger alert-dismissible fade show' role='alert'>"
                                                 + "<strong>" + mess + "</strong>"
                                                 + "<button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>"
@@ -112,8 +152,7 @@
 
                             %>
 
-                            <%                                
-                                if (request.getParameter("btnSaveMedico") != null) {
+                            <%                                if (request.getParameter("btnSaveMedico") != null) {
                                     operaciones ope = new operaciones();
 
                                     String p_Cedula = request.getParameter("cedula");
@@ -121,7 +160,6 @@
                                     String p_Apellidos = request.getParameter("apellidos");
                                     String p_Telefono = request.getParameter("telefono");
                                     int p_Especialidad = Integer.parseInt(request.getParameter("especialidad").toString());
-                                    
 
                                     String resu = ope.guardarDoc(p_Cedula, p_Nombres, p_Apellidos, p_Telefono, p_Especialidad);
 
@@ -134,30 +172,25 @@
                                 }
 
                             %>
-                            
-                            <%   
-                                String d_ID = request.getParameter("delete");
-                                if ( d_ID  != null) {
-                                    
-                                    
+
+                            <%                                String d_ID = request.getParameter("delete");
+                                if (d_ID != null) {
+
                                     operaciones ope = new operaciones();
-                                    
-                                    
-                                    
 
                                     String resu = ope.deleteMed(Integer.parseInt(d_ID));
-                                    
+
                                     if (!resu.isEmpty()) {
 
                                         sesion.setAttribute("message", resu);
                                         response.sendRedirect("mainCrud.jsp");
                                     }
-                                    
+
                                 }
 
                             %>
-                            
-                            
+
+
 
                             <table class="table table-bordered">
                                 <thead>
@@ -192,16 +225,15 @@
 
                                             if (rs != null) {
 
-                                                
-                                                    while (rs.next()) {
-                                                        String cedu = rs.getString("Cedula");
-                                                        String names = rs.getString("Nombres");
-                                                        String last_names = rs.getString("Apellidos");
-                                                        String tel = rs.getString("Telefono");
-                                                        int espe = rs.getInt("Especialidad");
-                                                        int ID = rs.getInt("ID");
-                                                        //String fallo = rs.getString("Resultado");
-                                    %>
+                                                while (rs.next()) {
+                                                    String cedu = rs.getString("Cedula");
+                                                    String names = rs.getString("Nombres");
+                                                    String last_names = rs.getString("Apellidos");
+                                                    String tel = rs.getString("Telefono");
+                                                    int espe = rs.getInt("Especialidad");
+                                                    int ID = rs.getInt("ID");
+                                                    //String fallo = rs.getString("Resultado");
+%>
 
 
                                     <tr>
@@ -214,12 +246,11 @@
                                         <td align="center"> <a href="mainCrud.jsp?delete=<%=ID%> " type="submit" name="btnDeletMed" class="far fa-trash-alt buttonDelete"></a></td>
                                     </tr>
                                     <%
-                                                    }
+                                                }
 
-                                                    
-                                                    rs.close();
-                                                    cs.close();
-                                                    con.close();
+                                                rs.close();
+                                                cs.close();
+                                                con.close();
 
                                             }
                                         } catch (SQLException e) {
@@ -228,7 +259,7 @@
 
                                     %>
 
-                               </tbody>
+                                </tbody>
                             </table>
 
                         </div>

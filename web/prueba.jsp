@@ -32,11 +32,15 @@
             String param1 = request.getParameter("usuario");
             String param2 = request.getParameter("password");
             String param3 = request.getParameter("nombre");
-
+            String param4 = request.getParameter("apellidos");
+            String param5 = request.getParameter("password_conf");
             
-            //String query = "INSERT INTO usuarios(Login, Password, Nombre, foto) VALUES( '" + param1 + "','" + param2 + "','" + param3 + "', '');";
+            param3 = param3 + " " + param4;
 
-            try {
+            //String query = "INSERT INTO usuarios(Login, Password, Nombre, foto) VALUES( '" + param1 + "','" + param2 + "','" + param3 + "', '');";
+            if(param2.equals(param5))
+            {
+                try {
 
                 cs.setString(1, param1);
                 cs.setString(2, param2);
@@ -44,16 +48,24 @@
                 cs.setObject(4, null);
                 rs = cs.executeQuery();
 
-                while(rs.next())
-                {  
-                   out.print("<a>" + rs.getString(1).toString() + "</a>");
+                while (rs.next()) {
+                    out.print("<a>" + rs.getString(1).toString() + "</a>");
                 }
-               
+
                 out.print("<script>location.replace('index.jsp') </script>");
                 con.close();
             } catch (SQLException e) {
-
-            };
+                
+            }
+                
+    
+            }else
+            {
+                out.print("<div class='alert alert-danger alert-dismissible fade show' role='alert'>"
+                           + "<strong>Contraseña no coincide</strong>"
+                           + "<button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>"
+                           + "</div>");
+            }
 
             //out.print("<a>" + param1 + "</a>");
             a = null;
@@ -66,52 +78,67 @@
 <html>
     <head>
         <title>Sign In</title>
+        <!--Boostrap 5-->
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
 
+        <!--Css stylesheet-->
+        <link href="css/register.css" rel="stylesheet">
     </head>
     <body>
 
         <main class="container col-12">
-            <div class="row mt-4">
-                <div class="col-md-4 mx-auto">
-                    <div class="card" id="formContainer">
-                        <div class="card-header" style="color:white; background-color: #58afe5; border-color: #005eff;">
-                            Registro
+            <div class= "container container-fluid mt-5">
+                <form action="#" method="POST" class="form-registro">
+
+                    <div class="row">
+                        <div class="col">
+                            <label>Nombre</Label>
+                            <input  type="text" class="form-control" name="nombre" placeholder="Nombres" required>
                         </div>
-
-                        <img src="/img/logoUAT.png" alt="Logo" class="rounded-circle mx-auto d-block m-4 logo">
-
-                        <div class= "card-body">
-                            <form action="#" method="POST">
-                                <div class="form-group my-1">
-                                    <input type="text" class="form-control" name="usuario" placeholder="Usuario" required />
-                                </div>
-                                <div class="form-group my-1">
-                                    <input type="text" class="form-control" name="nombre" placeholder="Nombre" required/>
-                                </div>
-
-                                <div class="form-group my-1">
-                                    <input type="password" class="form-control" name="password" placeholder="Contraseña" required/>
-                                </div>
-
-                                <div class="form-group my-1">
-                                    <input type="password" class="form-control" name="password_conf" placeholder="Confirmar contraseña" required />
-                                </div>
-
-                                <div class="form-group my-2">
-                                    <center>
-                                        <a href="index.jsp"> Ya estoy registrado </a>
-                                    </center>
-                                </div>
-                                <center>
-
-                                    <input type="submit" class="btn btn-primary btn-block" name="name">
-                                </center>
-                            </form>
+                        <div class="col">
+                            <label>Apellidos</label>
+                            <input  type="text" class="form-control" name="apellidos" ID="txtBox_apellidos" placeholder="Apellidos" required>
                         </div>
                     </div>
-                </div>
+
+                    <div class="row mt-3">
+                        <div class="col">
+                            <label>Contraseña</label>
+                            <input type="password" name="password" class="form-control"  placeholder="Contraseña" required>
+                        </div>
+                        <div class="col">
+                            <label>Confirma tu contraseña</label>
+                            <input type="password" class="form-control"  name="password_conf" placeholder="Confirma tu contraseña" required>
+                        </div>
+                    </div>
+
+                    <div class="row mt-3">
+                        <div class=" col">
+                            <label>Usuario</label>
+                            <input type="text" class="form-control" name="usuario" placeholder="Usuario" required>
+                        </div>
+                    </div>
+
+
+                    <div class="row mt-3" >
+                        <div class="col">
+                            <label for="formFile" class="form-label">Imagen de perfil</label>
+                            <input name="poto" class="form-control" type="file" id="formFile">
+                        </div>
+                    </div>
+
+                    <div class="form-group my-2">
+                        <center>
+                            <a href="index.jsp"> Ya estoy registrado </a>
+                        </center>
+                    </div>
+                    <center>
+
+                        <input type="submit" class="btn btn-primary btn-block" name="name">
+                    </center>
+                </form>
             </div>
+
         </main>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
 

@@ -1,0 +1,23 @@
+body {
+    width: 100%;
+    background-image: url(../img/Img.jpg);
+    background-repeat:no-repeat;
+    background-size:cover;
+    background-attachment: fixed;
+    background-position-y:bottom;
+}
+
+.btn{
+    width:100%;
+}
+.form-login {
+    width: 20em;
+    background-color: rgba(150, 150, 150, 0,45);
+    backdrop-filter: blur(20px);
+    border-radius: 20px;
+    padding: 1.5em;
+}
+
+.container{
+    width: 100%
+}

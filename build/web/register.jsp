@@ -11,8 +11,12 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Register</title>
+        <!--Boostrap 5-->
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
 
+        <!--Css styles-->
+        <link href="css/register.css" rel="stylesheet">
+        
     </head>
     <body>
         <div class="container">
@@ -23,7 +27,7 @@
                             Cuenta de Registro
                         </div>
                         <div class="card-body">
-                            <form action="/users/singup" method="POST">
+                            <form action="/users/singup" method="POST" class="form-registro">
                                 <div class="form-group my-1">
                                     <input
                                         type="text"
