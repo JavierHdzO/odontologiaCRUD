@@ -77,7 +77,7 @@
                         <div align="center">
                             <%                                if (sesion.getAttribute("message") != null) {
                                     String mess = sesion.getAttribute("message").toString();
-                                    if (mess.equals("Exito")) {
+                                    if (mess.equals("Exito") || mess.equals("Medico_Eliminado")) {
                                         out.print("<div class='alert alert-success alert-dismissible fade show' role='alert'>"
                                                 + "<strong>" + mess + "</strong>"
                                                 + "<button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>"
@@ -92,8 +92,28 @@
                                 }
 
                             %>
+                            
+                            <%      if (sesion.getAttribute("message_up") != null) {
+                            
+                                    String mess = sesion.getAttribute("message_up").toString();
+                                    if (mess.equals("Usuario_Actualizado")) {
+                                        out.print("<div class='alert alert-success alert-dismissible fade show' role='alert'>"
+                                                + "<strong>" + mess + "</strong>"
+                                                + "<button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>"
+                                                + "</div>");
+                                    } else if( mess.equals("Fallo_Actualizacion")){
+                                        out.print("<div class='alert alert-danger alert-dismissible fade show' role='alert'>"
+                                                + "<strong>" + mess + "</strong>"
+                                                + "<button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>"
+                                                + "</div>");
+                                    }
+                                    sesion.removeAttribute("message_up");
+                                }
 
-                            <%                                if (request.getParameter("btnSaveMedico") != null) {
+                            %>
+
+                            <%                                
+                                if (request.getParameter("btnSaveMedico") != null) {
                                     operaciones ope = new operaciones();
 
                                     String p_Cedula = request.getParameter("cedula");
@@ -114,6 +134,30 @@
                                 }
 
                             %>
+                            
+                            <%   
+                                String d_ID = request.getParameter("delete");
+                                if ( d_ID  != null) {
+                                    
+                                    
+                                    operaciones ope = new operaciones();
+                                    
+                                    
+                                    
+
+                                    String resu = ope.deleteMed(Integer.parseInt(d_ID));
+                                    
+                                    if (!resu.isEmpty()) {
+
+                                        sesion.setAttribute("message", resu);
+                                        response.sendRedirect("mainCrud.jsp");
+                                    }
+                                    
+                                }
+
+                            %>
+                            
+                            
 
                             <table class="table table-bordered">
                                 <thead>
@@ -163,11 +207,11 @@
                                     <tr>
                                         <td><%=cedu%></td>
                                         <td><%=names%></td>
-                                        <td><%=last_names%>as </td>
+                                        <td><%=last_names%> </td>
                                         <td><%=tel%></td>
                                         <td><%=espe%></td>
                                         <td align="center"> <a href="editarMedicos.jsp?id=<%=ID%>" class="far fa-edit buttonEdit"></a> </td>
-                                        <td align="center"> <a href="#" class="far fa-trash-alt buttonDelete"></a></td>
+                                        <td align="center"> <a href="mainCrud.jsp?delete=<%=ID%> " type="submit" name="btnDeletMed" class="far fa-trash-alt buttonDelete"></a></td>
                                     </tr>
                                     <%
                                                     }
@@ -183,15 +227,8 @@
                                         };
 
                                     %>
-                                    
-                                    <%
-                                        
-                                        
-                                    
-                                    %>
 
-
-                                </tbody>
+                               </tbody>
                             </table>
 
                         </div>

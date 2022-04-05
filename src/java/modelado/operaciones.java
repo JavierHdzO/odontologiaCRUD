@@ -49,9 +49,8 @@ public class operaciones {
                 while (rs.next()) {
                     usrRes = rs.getString("Login");
                     passRes = rs.getString("Password");
-                    
-                    if(usrRes.equals(Usrname) && pass.equals(passRes))
-                    {
+
+                    if (usrRes.equals(Usrname) && pass.equals(passRes)) {
                         return true;
                     }
                 }
@@ -66,10 +65,8 @@ public class operaciones {
         return false;
 
     }
-    
-    
-    
-        public String guardarDoc(String pCedula, String pNombres, String pApellidos, String pTelefono, int pEspecialdad) throws SQLException {
+
+    public String guardarDoc(String pCedula, String pNombres, String pApellidos, String pTelefono, int pEspecialdad) throws SQLException {
         Connection con = null;
         ResultSet rs = null, rs2;
         Statement inst = null;
@@ -80,33 +77,27 @@ public class operaciones {
             con = DriverManager.getConnection(this.URL, this.User, this.Pass);
             inst = con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
             cs = con.prepareCall("{call sp_newMedico(?,?,?,?,?)}");
-            
+
             cs.setString(1, pCedula);
             cs.setString(2, pNombres);
             cs.setString(3, pApellidos);
             cs.setString(4, pTelefono);
             cs.setInt(5, pEspecialdad);
-            
+
             rs = cs.executeQuery();
-            
 
             if (rs != null) {
 
-                
- 
                 while (rs.next()) {
                     resul = rs.getString("Resultado");
- 
-                    
-                    if(resul.equals("Exito") )
-                    {
-                        out.print("<p>"+resul+"</p>");
+
+                    if (resul.equals("Exito")) {
+                        out.print("<p>" + resul + "</p>");
                         rs.close();
                         cs.close();
                         con.close();
                         return resul;
-                    }else
-                    {
+                    } else {
                         rs.close();
                         cs.close();
                         con.close();
@@ -116,7 +107,7 @@ public class operaciones {
 
                 con.close();
             }
-            
+
         } catch (SQLException | ClassNotFoundException e) {
         }
 
@@ -124,4 +115,94 @@ public class operaciones {
 
     }
 
+    public String actualizarDoc(int pID, String pCedula, String pNombres, String pApellidos, String pTelefono, int pEspecialdad) throws SQLException {
+        Connection con = null;
+        ResultSet rs = null, rs2;
+        Statement inst = null;
+        CallableStatement cs = null;
+        String resul = "Fallo";
+        try {
+            Class.forName(this.Driver);
+            con = DriverManager.getConnection(this.URL, this.User, this.Pass);
+            inst = con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            cs = con.prepareCall("{call sp_updateMedico(?,?,?,?,?,?)}");
+
+            cs.setInt(1, pID);
+            cs.setString(2, pCedula);
+            cs.setString(3, pNombres);
+            cs.setString(4, pApellidos);
+            cs.setString(5, pTelefono);
+            cs.setInt(6, pEspecialdad);
+
+            rs = cs.executeQuery();
+
+            if (rs != null) {
+
+                while (rs.next()) {
+                    resul = rs.getString("Resultado");
+
+                    if (resul.equals("Usuario_Actualizado")) {
+                        out.print("<p>" + resul + "</p>");
+                        rs.close();
+                        cs.close();
+                        con.close();
+                        return resul;
+                    } else {
+                        rs.close();
+                        cs.close();
+                        con.close();
+                        return resul;
+                    }
+                }
+
+                con.close();
+            }
+
+        } catch (SQLException | ClassNotFoundException e) {
+        }
+
+        return resul;
+
+    }
+
+    public String deleteMed(int pID) throws SQLException {
+        Connection con = null;
+        ResultSet rs = null, rs2;
+        Statement inst = null;
+        CallableStatement cs = null;
+        String resul = "Fallo";
+        try {
+            Class.forName(this.Driver);
+            con = DriverManager.getConnection(this.URL, this.User, this.Pass);
+            inst = con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            cs = con.prepareCall("{call sp_deleteMedico(?)}");
+
+            cs.setInt(1, pID);
+
+            rs = cs.executeQuery();
+
+            if (rs != null) {
+
+                while (rs.next()) {
+                    resul = rs.getString("Resultado");
+
+                    if (resul.equals("Medico_Eliminado")) {
+                        rs.close();
+                        cs.close();
+                        con.close();
+                        return resul;
+                    }
+                }
+
+                con.close();
+            }
+
+        } catch (SQLException | ClassNotFoundException e) {
+        }
+        rs.close();
+        cs.close();
+        con.close();
+        return resul;
+
+    }
 }
