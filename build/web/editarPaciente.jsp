@@ -18,7 +18,9 @@
         <title>JSP Page</title>
 
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
-
+        
+        <!-- Css styles-->
+        <link href="css/editables.css" rel="stylesheet">
     </head>
     <body>
 
@@ -67,7 +69,7 @@
 
         <div  aria-labelledby="exampleModalLabel" >
             <div class="modal-dialog">
-                <div class="modal-content">
+                <div class="modal-content formulario">
                     <div class="modal-header">
                         <h5 class="modal-title" id="exampleModalLabel">Editar paciente</h5>
                         <a type="button" class="btn-close"  href="mainPacientes.jsp" aria-label="Close"></a>
