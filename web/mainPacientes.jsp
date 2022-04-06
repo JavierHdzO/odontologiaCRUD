@@ -115,7 +115,7 @@
 
                         <a class="btn btn-success mb-3 " type="button" id="btnAdd" data-bs-toggle="modal" data-bs-target="#exampleModal">Agregar</a>
 
-                        <div align="center">
+                        <div  class="tabScroll" align="center">
                             <%                                
                                     if (sesion.getAttribute("message") != null) {
                                     String mess = sesion.getAttribute("message").toString();

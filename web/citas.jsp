@@ -89,7 +89,8 @@
                             <div class="dropdown">
                                 <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
                                     <img src="https://github.com/mdo.png" alt="" width="32" height="32" class="rounded-circle me-2">
-                                    <strong><%                                        HttpSession sesion = request.getSession();
+                                    <strong><%                                        
+                                        HttpSession sesion = request.getSession();
                                         String usuario;
 
                                         if (sesion.getAttribute("usr") != null) {
@@ -120,10 +121,11 @@
 
                         <a class="btn btn-success mb-3 " type="button" id="btnAdd" data-bs-toggle="modal" data-bs-target="#exampleModal">Agregar</a>
 
-                        <div align="center">
-                            <%                                if (sesion.getAttribute("message") != null) {
+                        <div class="tabScroll" align="center">
+                            <%                                
+                                    if (sesion.getAttribute("message") != null) {
                                     String mess = sesion.getAttribute("message").toString();
-                                    if (mess.equals("Exito") || mess.equals("Cita_Eliminada") || mess.equals("Cita_agregada")) {
+                                    if (mess.equals("Exito") || mess.equals("Cita_Eliminada") || mess.equals("Cita_agregada") || mess.equals("Cita_Actualizada") ) {
                                         out.print("<div class='alert alert-success alert-dismissible fade show' role='alert'>"
                                                 + "<strong>" + mess + "</strong>"
                                                 + "<button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>"
@@ -158,7 +160,8 @@
 
                             %>
 
-                            <%                                if (request.getParameter("btnSaveCita") != null) {
+                            <%                                
+                                if (request.getParameter("btnSaveCita") != null) {
                                     Connection con = null;
                                     ResultSet rs = null;
                                     Statement inst = null;
