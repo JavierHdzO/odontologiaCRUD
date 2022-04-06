@@ -217,8 +217,7 @@
 
                             %>
 
-                            <%                                
-                                String d_ID = request.getParameter("delete");
+                            <%                                String d_ID = request.getParameter("delete");
                                 if (d_ID != null) {
                                     Connection con = null;
                                     ResultSet rs = null;
@@ -262,7 +261,7 @@
 
 
 
-                            <table class="table table-bordered" id="tablaC">
+                            <table class="table table-bordered">
                                 <thead>
                                 <th>ID</th>
                                 <th>Medico</th>

@@ -27,7 +27,7 @@
                 Class.forName("com.mysql.cj.jdbc.Driver");
                 con = DriverManager.getConnection(strCon, user, pass);
                 inst = con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-                cs = con.prepareCall("{call sp_newUser2(?,?,?,?)}");
+                cs = con.prepareCall("{call sp_newUser(?,?,?,?)}");
             } catch (ClassNotFoundException e) {
             }
             String param1 = request.getParameter("usuario");
@@ -48,12 +48,16 @@
                     cs.setObject(4, null);
                     rs = cs.executeQuery();
 
+                    /*
                     while (rs.next()) {
                         out.print("<a>" + rs.getString(1).toString() + "</a>");
                     }
-
-                    out.print("<script>location.replace('index.jsp') </script>");
-                    con.close();
+                    */
+                        rs.close();
+                        con.close();
+                        response.sendRedirect("index.jsp");
+                    //out.print("<script>location.replace('index.jsp') </script>");
+                    
                 } catch (SQLException e) {
                     rs.close();
                     cs.close();

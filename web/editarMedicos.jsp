@@ -127,7 +127,7 @@
 
         <%
                                 out.print("<script>"
-                                        + "var val =" + espe + " ;"
+                                        + "var val = '" + espe + "' ;"
                                         + "var sel = document.getElementById('inputSelected');"
                                         + "var opts = sel.options;"
                                         + "for (var opt, j = 0; opt = opts[j]; j++) {"

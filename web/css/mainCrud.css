@@ -55,6 +55,6 @@ body
 #tablaC
 {
 
-    overflow-y: visible;
+    overflow-y: auto;
     margin-bottom: 120px;
 }

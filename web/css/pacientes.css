@@ -1,8 +1,3 @@
-body
-{
-    
-    overflow-y: hidden;
-}
 
 main{
     background: white ;
@@ -51,6 +46,6 @@ span
 
 #tablaC
 {
-
+    overflow-y: auto;
     margin-bottom: 120px;
 }

@@ -152,10 +152,11 @@
 
                             %>
 
-                            <%                                if (request.getParameter("btnSaveMedico") != null) {
+                            <%                                
+                                if (request.getParameter("btnSaveMedico") != null) {
                                     operaciones ope = new operaciones();
 
-                                    String p_Cedula = request.getParameter("cedula");
+                                    int p_Cedula =Integer.parseInt( request.getParameter("cedula"));
                                     String p_Nombres = request.getParameter("nombres");
                                     String p_Apellidos = request.getParameter("apellidos");
                                     String p_Telefono = request.getParameter("telefono");
@@ -284,7 +285,7 @@
                             <div class="mb-3 row">
                                 <label for="staticEmail" class="col-sm-2 col-form-label">Cédula</label>
                                 <div class="col-sm-10">
-                                    <input type="text"  class="form-control-plaintext" id="staticEmail" name="cedula" requiered>
+                                    <input type="number"  class="form-control-plaintext" id="staticEmail" name="cedula" requiered>
                                 </div>
                             </div>
                             <div class="mb-3 row">

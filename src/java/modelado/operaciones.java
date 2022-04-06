@@ -66,7 +66,7 @@ public class operaciones {
 
     }
 
-    public String guardarDoc(String pCedula, String pNombres, String pApellidos, String pTelefono, int pEspecialdad) throws SQLException {
+    public String guardarDoc(int pCedula, String pNombres, String pApellidos, String pTelefono, int pEspecialdad) throws SQLException {
         Connection con = null;
         ResultSet rs = null, rs2;
         Statement inst = null;
@@ -78,7 +78,7 @@ public class operaciones {
             inst = con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
             cs = con.prepareCall("{call sp_newMedico(?,?,?,?,?)}");
 
-            cs.setString(1, pCedula);
+            cs.setInt(1, pCedula);
             cs.setString(2, pNombres);
             cs.setString(3, pApellidos);
             cs.setString(4, pTelefono);

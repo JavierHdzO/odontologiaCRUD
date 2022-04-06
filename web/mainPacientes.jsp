@@ -309,7 +309,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="exampleModalLabel">Añadir nuevo paciente</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <button type="reset" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                         <form action="#" method="POST">
@@ -395,7 +395,7 @@
 
 
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                                <button type="reset" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
                                 <input type="submit" class="btn btn-primary" value="Guardar" name="btnSaveMedico">
                             </div>
                         </form>

@@ -136,7 +136,7 @@
                                 </select>
                             </div>
 
-
+                             
 
                             <div class="mb-3 row">
                                 <label for="inputPassword" class="col-sm-2 col-form-label">Telefono</label>
@@ -164,19 +164,23 @@
                 </div>
             </div>
         </div>
+        
+                     
 
         <%
                                 out.print("<script>"
-                                        + "var val =" + p_sexo + " ;"
+                                        + "var val = '" + p_sexo + "' ;"
                                         + "var sel = document.getElementById('inputSelected');"
                                         + "var opts = sel.options;"
                                         + "for (var opt, j = 0; opt = opts[j]; j++) {"
                                         + "if (opt.value == val) {"
                                         + "sel.selectedIndex = j;"
+                                        + "console.log(j);"        
                                         + "break;"
                                         + "}"
                                         + "}"
                                         + " </script>");
+
                             }
                         }
                     }
