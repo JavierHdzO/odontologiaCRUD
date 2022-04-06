@@ -1,4 +1,4 @@
-# Odontologia CRUD
+# Odontologia CRUD JSP
 
 ## Equipo 4
 
