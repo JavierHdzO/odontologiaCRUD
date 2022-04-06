@@ -133,7 +133,6 @@ public class operaciones {
             cs.setString(4, pApellidos);
             cs.setString(5, pTelefono);
             cs.setInt(6, pEspecialdad);
-            
 
             rs = cs.executeQuery();
 
@@ -143,7 +142,7 @@ public class operaciones {
                     resul = rs.getString("Resultado");
 
                     if (resul.equals("Usuario_Actualizado")) {
-                        
+
                         rs.close();
                         cs.close();
                         con.close();
@@ -206,8 +205,8 @@ public class operaciones {
         return resul;
 
     }
-    
-        public String guardarPac( String pNombres, String pApellidos,String pCalle, String pNumero,String pColonia, int pCiudad, int pCP, java.sql.Date pFec, String pSexo ,String pTelefono, Object pFoto) throws SQLException {
+
+    public String guardarPac(String pNombres, String pApellidos, String pCalle, String pNumero, String pColonia, int pCiudad, int pCP, java.sql.Date pFec, String pSexo, String pTelefono, Object pFoto) throws SQLException {
         Connection con = null;
         ResultSet rs = null, rs2;
         Statement inst = null;
@@ -230,7 +229,7 @@ public class operaciones {
             cs.setString(9, pSexo);
             cs.setString(10, pTelefono);
             cs.setString(11, null);
-            
+
             //Registrado_Correctamente
             rs = cs.executeQuery();
 
@@ -261,9 +260,8 @@ public class operaciones {
         return resul;
 
     }
-        
-        
-        public String deletePaciente(int pID) throws SQLException {
+
+    public String deletePaciente(int pID) throws SQLException {
         Connection con = null;
         ResultSet rs = null, rs2;
         Statement inst = null;
@@ -302,7 +300,46 @@ public class operaciones {
         con.close();
         return resul;
 
-    }    
-        
-        
+    }
+
+    public String guardarCita(int idMedico, java.sql.Date pFecha, int pHorario, int idPaciente  ) throws SQLException {
+        Connection con = null;
+        ResultSet rs = null, rs2;
+        Statement inst = null;
+        CallableStatement cs = null;
+        String resul = "Fallo";
+        try {
+            Class.forName(this.Driver);
+            con = DriverManager.getConnection(this.URL, this.User, this.Pass);
+            inst = con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            cs = con.prepareCall("{call sp_newCita(?,?,?,?)}");
+
+     
+            cs.setInt(1, idMedico);
+            cs.setDate(2, pFecha);
+            cs.setInt(3, pHorario);
+            cs.setInt(4, idPaciente);
+            
+            //Registrado_Correctamente
+            rs = cs.executeQuery();
+
+            if (rs != null) {
+
+                while (rs.next()) {
+                    resul = rs.getString("Resultado");
+
+                      
+                      return resul;
+                }
+
+                con.close();
+            }
+
+        } catch (SQLException | ClassNotFoundException e) {
+        }
+
+        return resul;
+
+    }
+
 }

@@ -23,48 +23,48 @@
             String strCon = "jdbc:mysql://localhost:3306/odonto?zeroDateTimeBehavior=CONVERT_TO_NULL";
             String user = "root";
             String pass = "password";
-
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            con = DriverManager.getConnection(strCon, user, pass);
-            inst = con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-            cs = con.prepareCall("{call sp_newUser2(?,?,?,?)}");
-
+            try {
+                Class.forName("com.mysql.cj.jdbc.Driver");
+                con = DriverManager.getConnection(strCon, user, pass);
+                inst = con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+                cs = con.prepareCall("{call sp_newUser2(?,?,?,?)}");
+            } catch (ClassNotFoundException e) {
+            }
             String param1 = request.getParameter("usuario");
             String param2 = request.getParameter("password");
             String param3 = request.getParameter("nombre");
             String param4 = request.getParameter("apellidos");
             String param5 = request.getParameter("password_conf");
-            
+
             param3 = param3 + " " + param4;
 
             //String query = "INSERT INTO usuarios(Login, Password, Nombre, foto) VALUES( '" + param1 + "','" + param2 + "','" + param3 + "', '');";
-            if(param2.equals(param5))
-            {
+            if (param2.equals(param5)) {
                 try {
 
-                cs.setString(1, param1);
-                cs.setString(2, param2);
-                cs.setString(3, param3);
-                cs.setObject(4, null);
-                rs = cs.executeQuery();
+                    cs.setString(1, param1);
+                    cs.setString(2, param2);
+                    cs.setString(3, param3);
+                    cs.setObject(4, null);
+                    rs = cs.executeQuery();
 
-                while (rs.next()) {
-                    out.print("<a>" + rs.getString(1).toString() + "</a>");
+                    while (rs.next()) {
+                        out.print("<a>" + rs.getString(1).toString() + "</a>");
+                    }
+
+                    out.print("<script>location.replace('index.jsp') </script>");
+                    con.close();
+                } catch (SQLException e) {
+                    rs.close();
+                    cs.close();
+                    con.close();
                 }
 
-                out.print("<script>location.replace('index.jsp') </script>");
-                con.close();
-            } catch (SQLException e) {
-                
-            }
-                
-    
-            }else
-            {
+            } else {
                 out.print("<div class='alert alert-danger alert-dismissible fade show' role='alert'>"
-                           + "<strong>Contraseña no coincide</strong>"
-                           + "<button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>"
-                           + "</div>");
+                        + "<strong>Contraseña no coincide</strong>"
+                        + "<button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>"
+                        + "</div>");
             }
 
             //out.print("<a>" + param1 + "</a>");

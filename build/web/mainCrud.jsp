@@ -59,7 +59,7 @@
                             <hr>
                             <ul class="nav nav-pills flex-column mb-auto">
                                 <li class="nav-item">
-                                    <a href="#" class="nav-link active" aria-current="page">
+                                    <a  class="nav-link active" aria-current="page">
                                         <svg class="bi me-2" width="16" height="16"><use xlink:href="#home"/></svg>
                                         Medicos
                                     </a>
@@ -71,7 +71,7 @@
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="#" class="nav-link text-white">
+                                    <a href="citas.jsp" class="nav-link text-white">
                                         <svg class="bi me-2" width="16" height="16"><use xlink:href="#table"/></svg>
                                         Citas
                                     </a>
@@ -99,7 +99,7 @@
                                 </a>
                                 <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
                                     <li><hr class="dropdown-divider"></li>
-                                    <li><a class="dropdown-item" href='index.jsp?cerrar=true'>C</a></li>
+                                    <li><a class="dropdown-item" href='index.jsp?cerrar=true'>Cerrar Sesión</a></li>
                                 </ul>
                             </div>
                         </div>
