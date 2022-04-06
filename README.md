@@ -11,7 +11,8 @@
 
 ### Tecnologías empleadas
 
-- XAMPP MySQL
+- XAMPP 
+- MySQL
 - JSP
 - CSS
 - HTML
