@@ -1,4 +1,5 @@
 
+<%@page import="java.util.Base64"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page import="java.io.*, java.net.*, java.sql.*"%>
 <%@page import="modelado.operaciones"%>
@@ -18,13 +19,87 @@
               integrity="sha384-DyZ88mC6Up2uqS4h/KRgHuoeGwBcD4Ng9SiP4dIRy0EXTlnuz47vAwmeGwVChigm" crossorigin="anonymous">
 
         <!--Css styles-->
-        
+
         <link  href="css/sidebars.css" rel="stylesheet" type="text/css">
         <link  href="css/mainCrud.css" rel="stylesheet" type="text/css">
 
 
     </head>
     <body>
+        <%
+            HttpSession sesion = request.getSession();
+            if (sesion.getAttribute("usr") == null) {
+
+                out.print("<script>location.replace('index.jsp') </script>");
+            }
+        
+        %>
+        
+        
+        <%
+
+                                             sesion = request.getSession();
+                                             int usrID = Integer.parseInt(sesion.getAttribute("usrID").toString());
+
+                                             Connection con = null;
+                                             ResultSet rs = null;
+                                             Statement inst = null;
+                                             CallableStatement cs = null;
+
+                                             String strCon = "jdbc:mysql://localhost:3306/odonto?zeroDateTimeBehavior=CONVERT_TO_NULL";
+                                             String user = "root";
+                                             String pass = "password";
+
+                                             String base64Image = "";
+
+                                             
+                                             InputStream foto = null;
+                                             
+                                             
+
+                                             try {
+                                                 Class.forName("com.mysql.cj.jdbc.Driver");
+                                                 con = DriverManager.getConnection(strCon, user, pass);
+                                                 cs = con.prepareCall("{call sp_getPhotoUser(?)}");
+                                                 cs.setInt(1, usrID);
+
+                                             } catch (ClassNotFoundException e) {
+                                             }
+
+                                             try {
+                                                 
+
+                                                 rs = cs.executeQuery();
+                                                 if (rs.next()) {
+                                                     Blob blob = rs.getBlob("foto");
+                                             
+                                             
+                                             
+                                                    foto = blob.getBinaryStream();
+                                                    ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+                                                    byte[] buffer = new byte[4096];
+                                                    int bytesRead = -1;
+                                               
+                                                    while ((bytesRead = foto.read(buffer)) != -1) {
+                                                              outputStream.write(buffer, 0, bytesRead);                  
+                                                    }
+                                                    
+                                                    byte[] imageBytes = outputStream.toByteArray();
+                                                    base64Image = Base64.getEncoder().encodeToString(imageBytes);
+                                            
+                                                    foto.close();
+                                                    outputStream.close();
+                                             
+                                                    rs.close();
+                                                
+                                                }
+                                             } catch (SQLException E) {
+                                             }
+                                              
+
+                                         %>
+        
+        
         <nav class="navbar  navbar-expand-lg navbar-dark bg-primary">
             <div class="container">
                 <a class="navbar-brand" href="#">Odontologia</a>
@@ -76,14 +151,19 @@
                                         Citas
                                     </a>
                                 </li>
-                                
+
                             </ul>
                             <hr>
                             <div class="dropdown">
                                 <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <img src="https://github.com/mdo.png" alt="" width="32" height="32" class="rounded-circle me-2">
-                                    <strong><%
-                                        HttpSession sesion = request.getSession();
+                                    <%if (!base64Image.isEmpty()){ %>
+                                    
+                                    <img src="data:image/png;base64,<%=base64Image%>" alt="" width="32" height="32" class="rounded-circle me-2">
+                                    
+                                    <%} else {%>
+                                        <img src="https://github.com/mdo.png" alt="" width="32" height="32" class="rounded-circle me-2">
+                                    <% }%>
+                                    <strong><%                                        sesion = request.getSession();
                                         String usuario;
 
                                         if (sesion.getAttribute("usr") != null) {
@@ -152,11 +232,10 @@
 
                             %>
 
-                            <%                                
-                                if (request.getParameter("btnSaveMedico") != null) {
+                            <%                                if (request.getParameter("btnSaveMedico") != null) {
                                     operaciones ope = new operaciones();
 
-                                    int p_Cedula =Integer.parseInt( request.getParameter("cedula"));
+                                    int p_Cedula = Integer.parseInt(request.getParameter("cedula"));
                                     String p_Nombres = request.getParameter("nombres");
                                     String p_Apellidos = request.getParameter("apellidos");
                                     String p_Telefono = request.getParameter("telefono");
@@ -205,21 +284,22 @@
                                 </thead>
                                 <tbody>
 
-                                    <%                                        Connection con = null;
-                                        ResultSet rs = null;
-                                        Statement inst = null;
-                                        CallableStatement cs = null;
+                                    <%                                        con = null;
+                                        rs = null;
+                                        inst = null;
+                                        cs = null;
 
-                                        String strCon = "jdbc:mysql://localhost:3306/odonto?zeroDateTimeBehavior=CONVERT_TO_NULL";
-                                        String user = "root";
-                                        String pass = "password";
+                                        strCon = "jdbc:mysql://localhost:3306/odonto?zeroDateTimeBehavior=CONVERT_TO_NULL";
+                                        user = "root";
+                                        pass = "password";
+                                        try {
+                                            Class.forName("com.mysql.cj.jdbc.Driver");
+                                            con = DriverManager.getConnection(strCon, user, pass);
+                                            inst = con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
 
-                                        Class.forName("com.mysql.cj.jdbc.Driver");
-                                        con = DriverManager.getConnection(strCon, user, pass);
-                                        inst = con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-
-                                        cs = con.prepareCall("{call sp_showMedicos()}");
-
+                                            cs = con.prepareCall("{call sp_showMedicos()}");
+                                        } catch (ClassNotFoundException e) {
+                                        }
                                         try {
 
                                             rs = cs.executeQuery();
@@ -234,7 +314,7 @@
                                                     int espe = rs.getInt("Especialidad");
                                                     int ID = rs.getInt("ID");
                                                     //String fallo = rs.getString("Resultado");
-%>
+                                    %>
 
 
                                     <tr>

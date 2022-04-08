@@ -20,6 +20,8 @@
     </head>
     <body>
         <main>
+
+
             <%
                 Connection con = null;
                 ResultSet rs = null;
@@ -38,6 +40,19 @@
                 int pID = 0;
 
                 HttpSession sesion = request.getSession();
+
+
+            %>
+
+
+            <%                                        
+                sesion = request.getSession();
+                String usuario;
+
+                if (sesion.getAttribute("usr") == null) {
+                    
+                    out.print("<script>location.replace('index.jsp') </script>");
+                }
 
 
             %>
@@ -122,8 +137,7 @@
 
 
 
-                                <%                                    
-                                    String parID = request.getParameter("id");
+                                <%                                    String parID = request.getParameter("id");
 
                                     if (parID != null) {
                                         pID = Integer.parseInt(request.getParameter("id"));
@@ -304,7 +318,7 @@
                                     cs = con.prepareCall("{call sp_updateCita(?,?,?,?,?)}");
 
                                     Date p_Fecha = Date.valueOf(p_F);
-                                    
+
                                     cs.setInt(1, pID);
                                     cs.setInt(2, p_medID);
                                     cs.setDate(3, p_Fecha);

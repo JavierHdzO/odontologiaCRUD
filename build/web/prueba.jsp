@@ -1,84 +1,95 @@
+<%@page import="javax.servlet.annotation.MultipartConfig"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page import="java.io.*, java.net.*, java.sql.*"%>
 <%@page import= "java.lang.*,java.util.*,java.net.*,java.util.*,java.text.*"%>
-
 <%@page import="javax.servlet.http.*,javax.servlet.*"%>
 
 
+         <%
 
+            if (request.getParameter("btnGuardarUsr") != null) {
+                String a = request.getParameter("usuario");
+                String b = request.getParameter("password");
+                String c = request.getParameter("nombre");
+                //String a = request.getParameter("usuario");
+                if (a != null && b != null && c != null) {
+                    if (!a.isEmpty() && !b.isEmpty() && !c.isEmpty()) {
+                        Connection con = null;
+                        ResultSet rs = null;
+                        Statement inst = null;
+                        CallableStatement cs = null;
 
+                        String strCon = "jdbc:mysql://localhost:3306/odonto?zeroDateTimeBehavior=CONVERT_TO_NULL";
+                        String user = "root";
+                        String pass = "password";
+                        try {
+                            Class.forName("com.mysql.cj.jdbc.Driver");
+                            con = DriverManager.getConnection(strCon, user, pass);
+                            inst = con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+                            cs = con.prepareCall("{call sp_newUser(?,?,?,?)}");
+                        } catch (ClassNotFoundException e) {
+                        }
+                        String param1 = request.getParameter("usuario");
+                        String param2 = request.getParameter("password");
+                        String param3 = request.getParameter("nombre");
+                        String param4 = request.getParameter("apellidos");
+                        String param5 = request.getParameter("password_conf");
 
-<%
-    String a = request.getParameter("usuario");
-    String b = request.getParameter("password");
-    String c = request.getParameter("nombre");
-    //String a = request.getParameter("usuario");
-    if (a != null && b != null && c != null) {
-        if (!a.isEmpty() && !b.isEmpty() && !c.isEmpty()) {
-            Connection con = null;
-            ResultSet rs = null;
-            Statement inst = null;
-            CallableStatement cs = null;
+                        param3 = param3 + " " + param4;
 
-            String strCon = "jdbc:mysql://localhost:3306/odonto?zeroDateTimeBehavior=CONVERT_TO_NULL";
-            String user = "root";
-            String pass = "password";
-            try {
-                Class.forName("com.mysql.cj.jdbc.Driver");
-                con = DriverManager.getConnection(strCon, user, pass);
-                inst = con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-                cs = con.prepareCall("{call sp_newUser(?,?,?,?)}");
-            } catch (ClassNotFoundException e) {
-            }
-            String param1 = request.getParameter("usuario");
-            String param2 = request.getParameter("password");
-            String param3 = request.getParameter("nombre");
-            String param4 = request.getParameter("apellidos");
-            String param5 = request.getParameter("password_conf");
+                        //String query = "INSERT INTO usuarios(Login, Password, Nombre, foto) VALUES( '" + param1 + "','" + param2 + "','" + param3 + "', '');";
+                        if (param2.equals(param5)) {
+                            try {
 
-            param3 = param3 + " " + param4;
+                                cs.setString(1, param1);
+                                cs.setString(2, param2);
+                                cs.setString(3, param3);
+                                cs.setObject(4, null);
 
-            //String query = "INSERT INTO usuarios(Login, Password, Nombre, foto) VALUES( '" + param1 + "','" + param2 + "','" + param3 + "', '');";
-            if (param2.equals(param5)) {
-                try {
+                                if (request.getPart("foto") != null) {
+                                    Part part = request.getPart("foto");
+                                    InputStream inStream = part.getInputStream();
+                                    cs.setBlob(4, inStream);
+                                }
 
-                    cs.setString(1, param1);
-                    cs.setString(2, param2);
-                    cs.setString(3, param3);
-                    cs.setObject(4, null);
-                    rs = cs.executeQuery();
+                                rs = cs.executeQuery();
 
-                    /*
+                                /*
                     while (rs.next()) {
                         out.print("<a>" + rs.getString(1).toString() + "</a>");
                     }
-                    */
-                        rs.close();
-                        con.close();
-                        response.sendRedirect("index.jsp");
-                    //out.print("<script>location.replace('index.jsp') </script>");
-                    
-                } catch (SQLException e) {
-                    rs.close();
-                    cs.close();
-                    con.close();
+                                 */
+                                rs.close();
+                                con.close();
+                                response.sendRedirect("index.jsp");
+                                //out.print("<script>location.replace('index.jsp') </script>");
+
+                            } catch (SQLException e) {
+                                rs.close();
+                                cs.close();
+                                con.close();
+                            }
+
+                        } else {
+                            out.print("<div class='alert alert-danger alert-dismissible fade show' role='alert'>"
+                                    + "<strong>Contraseña no coincide</strong>"
+                                    + "<button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>"
+                                    + "</div>");
+                        }
+
+                        //out.print("<a>" + param1 + "</a>");
+                        a = null;
+                        b = null;
+                        c = null;
+
+                    }
                 }
 
-            } else {
-                out.print("<div class='alert alert-danger alert-dismissible fade show' role='alert'>"
-                        + "<strong>Contraseña no coincide</strong>"
-                        + "<button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>"
-                        + "</div>");
             }
+        %>
 
-            //out.print("<a>" + param1 + "</a>");
-            a = null;
-            b = null;
-            c = null;
 
-        }
-    }
-%>
+
 <html>
     <head>
         <title>Sign In</title>
@@ -89,10 +100,10 @@
         <link href="css/register.css" rel="stylesheet">
     </head>
     <body>
-
+       
         <main class="container col-12">
             <div class= "container container-fluid mt-5">
-                <form action="#" method="POST" class="form-registro">
+                <form action="#" method="POST" class="form-registro" enctype="multipart/form-data" >
 
                     <div class="row">
                         <div class="col">
@@ -127,7 +138,7 @@
                     <div class="row mt-3" >
                         <div class="col">
                             <label for="formFile" class="form-label">Imagen de perfil</label>
-                            <input name="poto" class="form-control" type="file" id="formFile">
+                            <input name="foto" class="form-control" type="file" id="formFile">
                         </div>
                     </div>
 
@@ -138,7 +149,7 @@
                     </div>
                     <center>
 
-                        <input type="submit" class="btn btn-primary btn-block" name="name">
+                        <input type="submit" class="btn btn-primary btn-block"  value="Guardar" name="btnGuardarUsr">
                     </center>
                 </form>
             </div>

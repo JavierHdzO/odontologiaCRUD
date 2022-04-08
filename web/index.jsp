@@ -48,12 +48,16 @@
                     if (request.getParameter("btnIngresar") != null) {
                         String usrName = request.getParameter("usuario");
                         String pass = request.getParameter("password");
+                        
+                       
 
-                        boolean rs = ope.logIn(usrName, pass);
+                        int rs = ope.logIn(usrName, pass);
 
-                        if (rs) {
+                        if (rs != 0) {
                             HttpSession sesion = request.getSession();
+                            
                             sesion.setAttribute("usr", usrName);
+                            sesion.setAttribute("usrID", rs);
                             response.sendRedirect("mainCrud.jsp");
                         } else {
                             response.sendRedirect("index.jsp");
@@ -63,6 +67,7 @@
 
                     if (request.getParameter("cerrar") != null) {
                         if (request.getParameter("cerrar").equals("true")) {
+                            response.sendRedirect("index.jsp");
                             session.invalidate();
                         }
                     }

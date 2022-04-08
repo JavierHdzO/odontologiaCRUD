@@ -17,13 +17,24 @@
         <title>JSP Page</title>
 
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
-        
+
         <!-- Css styles-->
         <link href="css/editables.css" rel="stylesheet">
     </head>
     <body>
 
+
+
         <%
+            HttpSession sesion = request.getSession();
+            if (sesion.getAttribute("usr") == null) {
+
+                out.print("<script>location.replace('index.jsp') </script>");
+            }
+            %>
+            
+            
+            <%
             String p_ID = request.getParameter("id");
             if (p_ID != null) {
 
@@ -68,7 +79,7 @@
                     </div>
                     <div class="modal-body ">
                         <form action="#" method="POST" >
-                            
+
                             <div class="mb-3 row">
                                 <label for="staticEmail" class="col-sm-2 col-form-label"><strong>Cédula</strong></label>
                                 <div class="col-sm-10">
@@ -129,7 +140,7 @@
         </div>
 
         <%
-                                
+
                             }
                         }
                     }
@@ -159,7 +170,7 @@
                     String resu = ope.actualizarDoc(pa_ID, p_Cedula, p_Nombres, p_Apellidos, p_Telefono, p_Especialidad);
 
                     if (!resu.isEmpty()) {
-                        HttpSession sesion = request.getSession();
+                        sesion = request.getSession();
                         sesion.setAttribute("message_up", resu);
                         response.sendRedirect("mainCrud.jsp");
                     }

@@ -25,6 +25,14 @@
     <body>
 
         <%
+            HttpSession sesion = request.getSession();
+            if (sesion.getAttribute("usr") == null) {
+
+                out.print("<script>location.replace('index.jsp') </script>");
+            }
+            
+           %>
+            <%
             String p_ID = request.getParameter("id");
             if (p_ID != null) {
 

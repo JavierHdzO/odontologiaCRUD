@@ -5,6 +5,7 @@
 --%>
 
 
+<%@page import="java.util.Base64"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page import="java.io.*, java.net.*, java.sql.*"%>
 <%@page import="modelado.operaciones"%>
@@ -31,7 +32,70 @@
 
     </head>
     <body>
+        <%
+            HttpSession sesion = request.getSession();
+            if (sesion.getAttribute("usr") == null) {
 
+                response.sendRedirect("index.jsp");
+            }
+
+        %>
+        <%
+
+            sesion = request.getSession();
+            int usrID = Integer.parseInt(sesion.getAttribute("usrID").toString());
+
+            Connection con = null;
+            ResultSet rs = null;
+            Statement inst = null;
+            CallableStatement cs = null;
+
+            String strCon = "jdbc:mysql://localhost:3306/odonto?zeroDateTimeBehavior=CONVERT_TO_NULL";
+            String user = "root";
+            String pass = "password";
+
+            String base64Image = "";
+
+            InputStream foto = null;
+
+            try {
+                Class.forName("com.mysql.cj.jdbc.Driver");
+                con = DriverManager.getConnection(strCon, user, pass);
+                cs = con.prepareCall("{call sp_getPhotoUser(?)}");
+                cs.setInt(1, usrID);
+
+            } catch (ClassNotFoundException e) {
+            }
+
+            try {
+
+                rs = cs.executeQuery();
+                if (rs.next()) {
+                    Blob blob = rs.getBlob("foto");
+
+                    foto = blob.getBinaryStream();
+                    ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+                    byte[] buffer = new byte[4096];
+                    int bytesRead = -1;
+
+                    while ((bytesRead = foto.read(buffer)) != -1) {
+                        outputStream.write(buffer, 0, bytesRead);
+                    }
+
+                    byte[] imageBytes = outputStream.toByteArray();
+                    base64Image = Base64.getEncoder().encodeToString(imageBytes);
+
+                    foto.close();
+                    outputStream.close();
+
+                    rs.close();
+
+                }
+            } catch (SQLException E) {
+            }
+
+
+        %>
         <nav class="navbar  navbar-expand-lg navbar-dark bg-primary">
             <div class="container">
                 <a class="navbar-brand" href="#">Odontologia</a>
@@ -88,9 +152,15 @@
                             <hr>
                             <div class="dropdown">
                                 <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <img src="https://github.com/mdo.png" alt="" width="32" height="32" class="rounded-circle me-2">
+                                    <%if (!base64Image.isEmpty()){ %>
+                                    
+                                    <img src="data:image/png;base64,<%=base64Image%>" alt="" width="32" height="32" class="rounded-circle me-2">
+                                    
+                                    <%} else {%>
+                                        <img src="https://github.com/mdo.png" alt="" width="32" height="32" class="rounded-circle me-2">
+                                    <% }%>
                                     <strong><%                                        
-                                        HttpSession sesion = request.getSession();
+                                        sesion = request.getSession();
                                         String usuario;
 
                                         if (sesion.getAttribute("usr") != null) {
@@ -122,10 +192,9 @@
                         <a class="btn btn-success mb-3 " type="button" id="btnAdd" data-bs-toggle="modal" data-bs-target="#exampleModal">Agregar</a>
 
                         <div class="tabScroll" align="center">
-                            <%                                
-                                    if (sesion.getAttribute("message") != null) {
+                            <%                                if (sesion.getAttribute("message") != null) {
                                     String mess = sesion.getAttribute("message").toString();
-                                    if (mess.equals("Exito") || mess.equals("Cita_Eliminada") || mess.equals("Cita_agregada") || mess.equals("Cita_Actualizada") ) {
+                                    if (mess.equals("Exito") || mess.equals("Cita_Eliminada") || mess.equals("Cita_agregada") || mess.equals("Cita_Actualizada")) {
                                         out.print("<div class='alert alert-success alert-dismissible fade show' role='alert'>"
                                                 + "<strong>" + mess + "</strong>"
                                                 + "<button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>"
@@ -160,16 +229,15 @@
 
                             %>
 
-                            <%                                
-                                if (request.getParameter("btnSaveCita") != null) {
-                                    Connection con = null;
-                                    ResultSet rs = null;
-                                    Statement inst = null;
-                                    CallableStatement cs = null;
+                            <%                                if (request.getParameter("btnSaveCita") != null) {
+                                     con = null;
+                                     rs = null;
+                                     inst = null;
+                                     cs = null;
 
-                                    String strCon = "jdbc:mysql://localhost:3306/odonto?zeroDateTimeBehavior=CONVERT_TO_NULL";
-                                    String user = "root";
-                                    String pass = "password";
+                                     strCon = "jdbc:mysql://localhost:3306/odonto?zeroDateTimeBehavior=CONVERT_TO_NULL";
+                                     user = "root";
+                                     pass = "password";
 
                                     Class.forName("com.mysql.cj.jdbc.Driver");
                                     con = DriverManager.getConnection(strCon, user, pass);
@@ -220,17 +288,18 @@
 
                             %>
 
-                            <%                                String d_ID = request.getParameter("delete");
+                            <%                                
+                                String d_ID = request.getParameter("delete");
                                 if (d_ID != null) {
-                                    Connection con = null;
-                                    ResultSet rs = null;
-                                    Statement inst = null;
-                                    CallableStatement cs = null;
+                                     con = null;
+                                     rs = null;
+                                     inst = null;
+                                     cs = null;
                                     try {
 
-                                        String strCon = "jdbc:mysql://localhost:3306/odonto?zeroDateTimeBehavior=CONVERT_TO_NULL";
-                                        String user = "root";
-                                        String pass = "password";
+                                         strCon = "jdbc:mysql://localhost:3306/odonto?zeroDateTimeBehavior=CONVERT_TO_NULL";
+                                         user = "root";
+                                         pass = "password";
 
                                         Class.forName("com.mysql.cj.jdbc.Driver");
                                         con = DriverManager.getConnection(strCon, user, pass);
@@ -276,14 +345,15 @@
                                 </thead>
                                 <tbody>
 
-                                    <%                                        Connection con = null;
-                                        ResultSet rs = null;
-                                        Statement inst = null;
-                                        CallableStatement cs = null;
+                                    <%                                        
+                                        con = null;
+                                         rs = null;
+                                         inst = null;
+                                         cs = null;
 
-                                        String strCon = "jdbc:mysql://localhost:3306/odonto?zeroDateTimeBehavior=CONVERT_TO_NULL";
-                                        String user = "root";
-                                        String pass = "password";
+                                         strCon = "jdbc:mysql://localhost:3306/odonto?zeroDateTimeBehavior=CONVERT_TO_NULL";
+                                         user = "root";
+                                         pass = "password";
 
                                         try {
                                             Class.forName("com.mysql.cj.jdbc.Driver");
@@ -307,7 +377,7 @@
                                                     String NombreP = rs.getString("NombreP");
 
                                                     //String fallo = rs.getString("Resultado");
-%>
+                                    %>
 
 
                                     <tr>

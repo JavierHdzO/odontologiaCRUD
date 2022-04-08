@@ -11,6 +11,8 @@ import static java.lang.System.out;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 public class operaciones {
 
@@ -26,7 +28,7 @@ public class operaciones {
         URL = "jdbc:mysql://localhost:3306/odonto?zeroDateTimeBehavior=CONVERT_TO_NULL";
     }
 
-    public boolean logIn(String Usrname, String pass) throws SQLException {
+    public int logIn(String Usrname, String pass) throws SQLException {
         Connection con = null;
         ResultSet rs = null, rs2;
         Statement inst = null;
@@ -49,9 +51,10 @@ public class operaciones {
                 while (rs.next()) {
                     usrRes = rs.getString("Login");
                     passRes = rs.getString("Password");
+                    int usrID = rs.getInt("Clave");
 
                     if (usrRes.equals(Usrname) && pass.equals(passRes)) {
-                        return true;
+                        return usrID;
                     }
                 }
 
@@ -62,7 +65,7 @@ public class operaciones {
         } catch (ClassNotFoundException ex) {
         }
 
-        return false;
+        return 0;
 
     }
 
@@ -302,7 +305,7 @@ public class operaciones {
 
     }
 
-    public String guardarCita(int idMedico, java.sql.Date pFecha, int pHorario, int idPaciente  ) throws SQLException {
+    public String guardarCita(int idMedico, java.sql.Date pFecha, int pHorario, int idPaciente) throws SQLException {
         Connection con = null;
         ResultSet rs = null, rs2;
         Statement inst = null;
@@ -314,12 +317,11 @@ public class operaciones {
             inst = con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
             cs = con.prepareCall("{call sp_newCita(?,?,?,?)}");
 
-     
             cs.setInt(1, idMedico);
             cs.setDate(2, pFecha);
             cs.setInt(3, pHorario);
             cs.setInt(4, idPaciente);
-            
+
             //Registrado_Correctamente
             rs = cs.executeQuery();
 
@@ -328,8 +330,7 @@ public class operaciones {
                 while (rs.next()) {
                     resul = rs.getString("Resultado");
 
-                      
-                      return resul;
+                    return resul;
                 }
 
                 con.close();
@@ -340,6 +341,17 @@ public class operaciones {
 
         return resul;
 
+    }
+
+    public BufferedInputStream showImag(int id, HttpServletResponse response) throws SQLException, IOException {
+        Connection con = null;
+        ResultSet rs = null, rs2;
+        Statement inst = null;
+        CallableStatement cs = null;
+        
+        
+        
+        return null;
     }
 
 }
