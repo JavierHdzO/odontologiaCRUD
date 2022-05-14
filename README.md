@@ -1,13 +1,12 @@
 # Odontologia CRUD JSP
 
-## Equipo 4
+## Author
 
 - Hernandez Ortiz Francisco Javier
 
 
-### Tecnologías empleadas
+### Employed Technologies
 
-- XAMPP 
 - MySQL
 - JSP
 - CSS
